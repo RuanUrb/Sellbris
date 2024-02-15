@@ -32,8 +32,8 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
 
  const index = async (req: any, res: Response)=>{
     const { user } = req;
-
-    return res.send(`Welcome ${user?.name}`);
+    const { _id, name, email, location, products} = user
+    return res.json({_id, name, email, location, products})
 }
 
 export {createUser, index}
