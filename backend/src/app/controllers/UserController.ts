@@ -4,13 +4,6 @@ import jwt from 'jsonwebtoken';
 import User from '../../domain/entities/User/User';
 import 'dotenv/config';
 import { SECRET_KEY } from '../../infra/environment/env';
-import { IUser } from '../../domain/entities/User/IUser';
-
-/*
-export interface IIndexUserRequest extends Request{
-  user?: IUser;
-}
-*/
 
 const createUser = async (req: Request, res: Response): Promise<Response> => {
     const userData = req.body;

@@ -11,7 +11,6 @@ const app = express()
 connectToDatabase()
 
 passportStrategy(passport)
-app.use(passport.initialize())
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
