@@ -7,8 +7,8 @@ import { SECRET_KEY } from '../../infra/environment/env';
 // Custom JWT authentication middleware
 async function verifyJWT(req: Request, res: Response, next: NextFunction) {
   if (req.headers) {
-    const token = req.headers.authorization;
-
+    const token = req.headers.authorization
+    ?.split(' ')[1]; // necessary if you are passing in like so: "" Bearer *************.... "
     if (!token) {
       return res.status(400).json({ error: 'No token provided' });
     }
