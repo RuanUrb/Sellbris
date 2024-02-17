@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Product from "../../domain/entities/Product/Product";
 import Comment from "../../domain/entities/Comment/Comment";
-import mongoose from "mongoose";
-
 const createComment = async (req: Request, res: Response, next: NextFunction)=>{
     const {id} = req.params
     const product = await Product.findById(id)
@@ -18,22 +16,9 @@ const createComment = async (req: Request, res: Response, next: NextFunction)=>{
 
 const deleteComment = async (req: Request, res: Response, next: NextFunction)=>{
     const {id, commentId} = req.params
-    const session = await mongoose.startSession();
-    session.startTransaction();
-    try {
-        await Product.findByIdAndUpdate(id, { $pull: { comments: commentId } }, { session });
-      
-        await Comment.findByIdAndDelete(commentId, { session });
-      
-        await session.commitTransaction();
-        return res.json({ message: 'Successful' });
-      } catch (error: any) {
-        await session.abortTransaction();
-        return res.status(500).json({ error: 'Transaction failed', message: error.message });
-      } finally {
-        // End the session
-        session.endSession();
-      }
+        await Product.findByIdAndUpdate(id, { $pull: { comments: commentId } });
+        await Comment.findByIdAndDelete(commentId);
+    return res.status(200).json({message: 'Deleted successfully'})
 }
 
 export {createComment, deleteComment}

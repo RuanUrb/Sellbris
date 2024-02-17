@@ -38,7 +38,12 @@ const getProduct = async (req: Request, res: Response, next: NextFunction)=>{
     const {id} = req.params
     const product = await Product.findById(id).populate({
         path: 'comments',
-        model: Comment
+        model: Comment,
+        populate: {
+            path: 'author',
+            model: User,
+            select: 'name'
+        }
     })
     .populate({
         path: 'seller',
@@ -75,8 +80,7 @@ const editProduct = async (req: Request, res: Response, next: NextFunction)=>{
 const deleteProduct = async (req: Request, res: Response, next: NextFunction)=>{
     const {id} = req.params
     await Product.findByIdAndDelete(id)
-    res.json({message: 'success'})
-
+    return res.json({message: 'success'})
 }
 
 

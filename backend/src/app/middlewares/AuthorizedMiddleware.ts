@@ -17,7 +17,7 @@ const isCommentAuthorized = async (req: Request, res: Response, next: NextFuncti
     const comment = await Comment.findById(commentId)
     if(!comment) return res.status(404).json({error: 'Resource not found.'})
     const authorId = comment.author
-    if(authorId !== req.body.id) return res.status(401).json({error: 'You do not have permission to do this'})
+    if(authorId != req.body.id) return res.status(401).json({error: 'You do not have permission to do this'})
     next()
 }
 
