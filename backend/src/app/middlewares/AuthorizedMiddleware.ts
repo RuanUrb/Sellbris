@@ -4,6 +4,7 @@ import Comment from '../../domain/entities/Comment/Comment';
 
 const isAuthorized = async (req: Request, res: Response, next: NextFunction)=>{
     const {id} = req.params
+    console.log(id)
     const product = await Product.findById(id)
     if(!product) return res.status(404).json({error: 'Resource not found.'})
     const userId = product.seller

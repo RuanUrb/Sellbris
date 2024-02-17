@@ -42,7 +42,8 @@ const getProduct = async (req: Request, res: Response, next: NextFunction)=>{
     })
     .populate({
         path: 'seller',
-        model: User
+        model: User,
+        select: 'name location'
     })
     /*
     .populate({

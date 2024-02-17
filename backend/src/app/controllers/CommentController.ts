@@ -11,22 +11,9 @@ const createComment = async (req: Request, res: Response, next: NextFunction)=>{
     comment.author = req.body.id
     product.comments.push(comment.id)
     comment.date = new Date()
-    const session = await mongoose.startSession();
-session.startTransaction();
-
-try {
-  await comment.save({ session });
-  await product.save({ session });
-
-  // If everything is successful, commit the transaction
-  await session.commitTransaction();
-  session.endSession();
-} catch (error) {
-  await session.abortTransaction();
-  session.endSession();
-  throw error;
-}
-
+    await comment.save();
+    await product.save();
+    return res.status(201).json({message: 'Sucessful'})
 }
 
 const deleteComment = async (req: Request, res: Response, next: NextFunction)=>{

@@ -1,11 +1,12 @@
 import express from 'express'
 import { createComment, deleteComment } from '../../app/controllers/CommentController'
-import { isAuthorized, isCommentAuthorized } from '../../app/middlewares/AuthorizedMiddleware'
+import { isCommentAuthorized } from '../../app/middlewares/AuthorizedMiddleware'
+import { verifyJWT } from '../../app/middlewares/AuthMiddleware'
 
 const router = express.Router()
 
-router.post('/', isAuthorized, createComment)
+router.post('/:id/comments', verifyJWT, createComment)
 
-router.delete('/:commentId', isAuthorized, isCommentAuthorized , deleteComment)
+router.delete('/:id/comments/:commentId', verifyJWT, isCommentAuthorized , deleteComment)
 
 export {router as commentRouter}

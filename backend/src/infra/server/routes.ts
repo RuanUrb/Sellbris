@@ -6,5 +6,5 @@ import { commentRouter } from '../routers/CommentRouter'
 const router = Router()
 router.use(userRouter)
 router.use('/products', productRouter)
-router.use('/products/:id/comments', commentRouter)
+router.use('/products', commentRouter)
 export {router}
