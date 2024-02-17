@@ -10,7 +10,7 @@ const createComment = async (req: Request, res: Response, next: NextFunction)=>{
     const comment = new Comment({body: req.body.body})
     comment.author = req.body.id
     product.comments.push(comment.id)
-    
+    comment.date = new Date()
     const session = await mongoose.startSession();
 session.startTransaction();
 
