@@ -6,15 +6,17 @@ const upload = multer({storage})
 import {createProduct, deleteProduct, editProduct, getProduct, getAllProducts} from '../../app/controllers/ProductController'
 import { verifyJWT } from '../../app/middlewares/AuthMiddleware'
 import { isAuthorized } from '../../app/middlewares/AuthorizedMiddleware'
+import { createProductValidator } from '../../app/validators/CreatProductValidator'
+import { editProductValidator } from '../../app/validators/EditProductValidator'
 
 router.get('/', getAllProducts)
 
 router.get('/:id', getProduct)
     // THIS ROUTE DISPLAYS ALL INFO ABOUT A PRODUCT)
 
-router.post('/', verifyJWT, upload.array('images'), createProduct)
+router.post('/', verifyJWT, createProductValidator, upload.array('images'), createProduct)
 
-router.put('/:id', verifyJWT, isAuthorized , editProduct)
+router.put('/:id', verifyJWT, isAuthorized, editProductValidator, editProduct)
 
 router.delete('/:id', verifyJWT, isAuthorized,  deleteProduct)
 
