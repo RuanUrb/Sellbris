@@ -5,9 +5,12 @@ import { API_PORT } from "../environment/env"
 import {router} from './routes'
 import passport from "passport"
 import passportStrategy from '../../infra/setup/passport'
+import cors from 'cors'
 
 const app = express()
-
+app.use(cors({
+    origin: '*'
+}))
 connectToDatabase()
 
 passportStrategy(passport)

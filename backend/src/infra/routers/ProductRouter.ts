@@ -6,7 +6,7 @@ const upload = multer({storage})
 import {createProduct, deleteProduct, editProduct, getProduct, getAllProducts} from '../../app/controllers/ProductController'
 import { verifyJWT } from '../../app/middlewares/AuthMiddleware'
 import { isAuthorized } from '../../app/middlewares/AuthorizedMiddleware'
-import { createProductValidator } from '../../app/validators/CreatProductValidator'
+import { createProductValidator } from '../../app/validators/CreateProductValidator'
 import { editProductValidator } from '../../app/validators/EditProductValidator'
 
 router.get('/', getAllProducts)
