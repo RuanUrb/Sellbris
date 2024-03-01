@@ -1,13 +1,12 @@
 import { Router } from 'express';
 import { createUser, index, logout } from '../../app/controllers/UserController';
-import passport from 'passport';
-import { createJWT } from '../../app/middlewares/AuthMiddleware';
+import { createJWT, userJWT } from '../../app/middlewares/AuthMiddleware';
 import { UserValidator } from '../../app/validators/UserValidator';
 
 const router = Router();
 
 // Home
-router.get('/', passport.authenticate('jwt', { session: false }), index);
+router.get('/', userJWT, index);
 
 // Register
 

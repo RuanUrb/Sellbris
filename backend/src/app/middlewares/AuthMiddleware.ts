@@ -6,7 +6,7 @@ import { SECRET_KEY } from '../../infra/environment/env';
 
 // Custom JWT authentication middleware
 async function verifyJWT(req: Request, res: Response, next: NextFunction) {
-  if (req.cookies) {
+  if (req.headers) {
     const token = req.cookies.token
     //?.split(' ')[1]; // necessary if you are passing in like so: "" Bearer *************.... "
     if (!token) {
@@ -68,4 +68,34 @@ async function createJWT(req: Request, res: Response) {
   return res.status(400).json({ error: 'No headers provided' });
 }
 
-export { verifyJWT, createJWT };
+const userJWT = (req: Request, res: Response, next: NextFunction)=>{
+  if (req.headers) {
+    const token = req.cookies.token
+    //?.split(' ')[1]; // necessary if you are passing in like so: "" Bearer *************.... "
+    if (!token) {
+      return res.status(400).json({ error: 'No token provided' });
+    }
+
+    //@ts-ignore
+    return jwt.verify(token, SECRET_KEY, async (err: any, decoded: any) => {
+      if (err) {
+        return res.status(400).json({ error: err });
+      }
+
+      req.body.id = decoded.id;
+
+      const user = await User.findById(req.body.id);
+
+      if (!user) {
+        return res.status(400).json({ error: 'User does not exist' });
+      }
+      //return res.json({user})
+      return res.json({isAuth: true})
+    });
+  }
+  return res.status(400).json({ error: 'No headers provided' });
+}
+
+
+
+export { verifyJWT, createJWT, userJWT };
