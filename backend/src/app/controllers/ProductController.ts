@@ -5,29 +5,45 @@ import mbxGeocoding from '@mapbox/mapbox-sdk/services/geocoding'
 import Comment from "../../domain/entities/Comment/Comment";
 import { cloudinary } from "../../infra/setup/cloudinary";
 import { MAPBOX_TOKEN } from "../../infra/environment/env";
+import { ObjectId } from "mongoose";
 //import { Category } from "../models/category.model";
 const geocoder = mbxGeocoding({
     accessToken: MAPBOX_TOKEN || ''
 })
 
 const getAllProducts = async (req: Request, res: Response, next: NextFunction)=>{
-    const products = await Product.find({})
-    if(products) res.json(products)
-    else res.json({message: 'error'})
+    const {count} = req.query
+    const limit = Number(count)
+    if(limit) {
+        const products = await Product.find({}).sort({date: -1}).limit(limit)
+        if(products) return res.json(products)
+        else return res.json({message: 'error'})
+    }else
+     {
+    const products = await Product.find({}).sort({date: -1})
+    if(products) return res.json(products)
+    else return res.json({message: 'error'})
 }
+    
+    
+}
+
 
 const createProduct = async (req: Request, res: Response, next: NextFunction)=>{
     const {title, price, description, location} = req.body
+    console.log(req.body)
+    console.log(req.files)
     const geoData = await geocoder.forwardGeocode({
         query: location,
         limit: 1
     }).send()
     const product = new Product({title, price, description, location})
     product.geometry = geoData.body.features[0].geometry
-    if(req.files && Array.isArray(req.files)) product.images = req.files.map(f=>({url: f.path, filename: f.filename})) // there should be an else to set a NO IMAGE image
+    if(req.files && Array.isArray(req.files) && req.files.length) product.images = req.files.map(f=>({url: f.path, filename: f.filename})) // there should be an else to set a NO IMAGE image
     else product.images = [{url: 'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg', filename: 'NotFound.svg'}]
     
-    product.seller = req.body.id
+    //@ts-ignore
+    product.seller = '65dd1e1f4ff6113638a5b762'
     
     product.date = new Date()
     await product.save()

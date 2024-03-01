@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createUser, index } from '../../app/controllers/UserController';
+import { createUser, index, logout } from '../../app/controllers/UserController';
 import passport from 'passport';
 import { createJWT } from '../../app/middlewares/AuthMiddleware';
 import { UserValidator } from '../../app/validators/UserValidator';
@@ -14,5 +14,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), index);
 router.post('/login', createJWT);
 
 router.post('/register', UserValidator, createUser);
+
+router.get('/logout', logout)
 
 export { router as userRouter };

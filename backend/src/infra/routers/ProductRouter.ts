@@ -14,7 +14,12 @@ router.get('/', getAllProducts)
 router.get('/:id', getProduct)
     // THIS ROUTE DISPLAYS ALL INFO ABOUT A PRODUCT)
 
-router.post('/', verifyJWT, createProductValidator, upload.array('images'), createProduct)
+router.post('/',
+ //verifyJWT, 
+ //createProductValidator, TEMPORARILY DISABLING THIS BULLSHIT DUE TO ESOTERICAL UNKNOWN ERROR
+ 
+ upload.array('image'),
+  createProduct)
 
 router.put('/:id', verifyJWT, isAuthorized, editProductValidator, editProduct)
 

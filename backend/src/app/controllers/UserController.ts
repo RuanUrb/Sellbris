@@ -27,7 +27,10 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
     //@ts-ignore
     const token = jwt.sign({ id }, SECRET_KEY, { expiresIn: '1d' });
 
-    return res.status(201).json({ token });
+    return res.status(201).cookie('token', token, {
+      maxAge: 60*60*24*1000,
+      httpOnly: true
+    }).json({ token });
   }
 
  const index = async (req: any, res: Response)=>{
@@ -36,4 +39,9 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
     return res.json({_id, name, email, location, products})
 }
 
-export {createUser, index}
+const logout = async (req: any, res: Response)=>{
+    res.clearCookie('token', {})
+    return res.status(200).json({message: 'logout'})
+}
+
+export {createUser, index, logout}

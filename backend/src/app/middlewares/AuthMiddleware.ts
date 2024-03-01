@@ -6,9 +6,9 @@ import { SECRET_KEY } from '../../infra/environment/env';
 
 // Custom JWT authentication middleware
 async function verifyJWT(req: Request, res: Response, next: NextFunction) {
-  if (req.headers) {
-    const token = req.headers.authorization
-    ?.split(' ')[1]; // necessary if you are passing in like so: "" Bearer *************.... "
+  if (req.cookies) {
+    const token = req.cookies.token
+    //?.split(' ')[1]; // necessary if you are passing in like so: "" Bearer *************.... "
     if (!token) {
       return res.status(400).json({ error: 'No token provided' });
     }
@@ -24,9 +24,8 @@ async function verifyJWT(req: Request, res: Response, next: NextFunction) {
       const user = await User.findById(req.body.id);
 
       if (!user) {
-        return res.status(400).json({ error: 'User not exists' });
+        return res.status(400).json({ error: 'User does not exist' });
       }
-
       next();
     });
   }
@@ -46,7 +45,7 @@ async function createJWT(req: Request, res: Response) {
     const user = await User.findOne({ username });
 
     if (!user) {
-      return res.status(400).json({ error: 'User not exists' });
+      return res.status(400).json({ error: 'User does not exist' });
     }
 
     const passwordIsValid = await bcrypt.compare(req.body.password, user.password);
@@ -61,7 +60,10 @@ async function createJWT(req: Request, res: Response) {
 
     const newToken = jwt.sign({ id }, SECRET_KEY, { expiresIn: '1d' });
 
-    return res.status(200).json(newToken);
+    return res.status(200).cookie('token', newToken, {
+      maxAge: 60*60*24*1000,
+      httpOnly: true
+    }).json(newToken);
   }
   return res.status(400).json({ error: 'No headers provided' });
 }

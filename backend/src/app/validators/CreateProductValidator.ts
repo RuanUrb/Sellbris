@@ -16,7 +16,6 @@ const createProductValidator = (req: Request, res: Response, next: NextFunction)
         const errorMessages = details.map(({ message }) => message);
         return res.status(400).json({ status: 'Validation error', details: errorMessages });
       }
-    
       return next();
 }
 
