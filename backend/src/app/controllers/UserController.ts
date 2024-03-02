@@ -40,7 +40,9 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
 }
 
 const logout = async (req: any, res: Response)=>{
-    res.clearCookie('token', {})
+    res.clearCookie('token', {
+      httpOnly: true
+    })
     return res.status(200).json({message: 'logout'})
 }
 

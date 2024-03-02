@@ -18,10 +18,11 @@ async function verifyJWT(req: Request, res: Response, next: NextFunction) {
       if (err) {
         return res.status(400).json({ error: err });
       }
+      //@ts-ignore
+      req.userId = decoded.id;
+            //@ts-ignore
 
-      req.body.id = decoded.id;
-
-      const user = await User.findById(req.body.id);
+      const user = await User.findById(req.userId);
 
       if (!user) {
         return res.status(400).json({ error: 'User does not exist' });

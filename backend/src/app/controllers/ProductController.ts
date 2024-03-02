@@ -31,8 +31,6 @@ const getAllProducts = async (req: Request, res: Response, next: NextFunction)=>
 
 const createProduct = async (req: Request, res: Response, next: NextFunction)=>{
     const {title, price, description, location} = req.body
-    console.log(req.body)
-    console.log(req.files)
     const geoData = await geocoder.forwardGeocode({
         query: location,
         limit: 1
@@ -43,7 +41,7 @@ const createProduct = async (req: Request, res: Response, next: NextFunction)=>{
     else product.images = [{url: 'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg', filename: 'NotFound.svg'}]
     
     //@ts-ignore
-    product.seller = '65dd1e1f4ff6113638a5b762'
+    product.seller = req.userId
     
     product.date = new Date()
     await product.save()

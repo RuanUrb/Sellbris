@@ -15,7 +15,7 @@ router.get('/:id', getProduct)
     // THIS ROUTE DISPLAYS ALL INFO ABOUT A PRODUCT)
 
 router.post('/',
- //verifyJWT, 
+ verifyJWT, 
  //createProductValidator, TEMPORARILY DISABLING THIS BULLSHIT DUE TO ESOTERICAL UNKNOWN ERROR
  
  upload.array('image'),
